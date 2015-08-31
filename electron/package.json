@@ -1,0 +1,9 @@
+{
+  "name": "ReactiveTraderJS",
+  "version": "0.0.1",
+  "main": "main.js",
+  "dependencies": {
+    "electron-toaster": "^1.0.8",
+    "node-notifier": "^4.2.3"
+  }
+}

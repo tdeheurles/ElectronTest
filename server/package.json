@@ -1,0 +1,29 @@
+{
+  "name": "electrontest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^0.13.3",
+    "react-bootstrap": "^0.25.0",
+    "bootstrap": "^3.3.5",
+    "electron-toaster": "^1.0.8",
+    "node-notifier": "^4.2.3"
+  },
+  "devDependencies": {
+    "babelify": "^6.2.0",
+    "browserify": "^11.0.1",
+    "electron-packager": "^5.0.2",
+    "electron-prebuilt": "^0.31.1",
+    "electron-rebuild": "^0.2.5",
+    "gulp": "^3.9.0",
+    "gulp-plumber": "^1.0.1",
+    "gutil": "^1.6.4",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
