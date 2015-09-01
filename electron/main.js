@@ -1,66 +1,108 @@
 /* jshint node: true*/
 'use strict';
 
-var app = require('app');  // Module to control application life.
-var BrowserWindow = require('browser-window');  // Module to create native browser window.
-var Menu = require('menu');
-var Tray = require('tray');
+var Rx = require('rx')
 
-// Report crashes to our server.
-require('crash-reporter').start();
+var atomScreen = null;
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is GCed.
-var mainWindow = null;
 
-var notifier = require('node-notifier')
+// ============ IPC ==============
+// ===============================
+var ipc_main = require('ipc')
 
-// Quit when all windows are closed.
+ipc_main.on('create_someReactView', function(event, arg) {
+  create_someReactView()
+})
+
+ipc_main.on('notification_been_clicked', function(event, arg) {
+  console.log(arg)
+});
+
+ipc_main.on('kill_me', function(event, arg) {
+  console.log(arg)
+});
+
+let cache = [0,0,0, 0,0,0, 0,0,0,
+             0,0,0, 0,0,0, 0,0,0,
+             0,0,0, 0,0,0, 0,0,0,
+             0,0,0, 0,0,0, 0,0,0 ]
+
+ipc_main.on('give_it_to_me', function(event, arg) {
+  console.log("stream requested")
+  var source = Rx.Observable
+                 .timer(100,16)
+                 .map(function(x) { 
+                    return [  
+                      Math.floor((Math.random() * 36) + 1),
+                      Math.floor((Math.random() * 100) + 1)
+                    ]});
+
+  source.subscribe(
+    function (x) {
+      cache[x[0]] = x[1]
+      event.sender.send('update', cache)
+    },
+    function (err) {
+        console.log('Error: ' + err);
+    },
+    function () {
+        console.log('Completed');
+    }
+  );
+})
+
+
+
+// ============ MAIN ==============
+// ================================
+var app = require('app');
+var BrowserWindow = require('browser-window');
+
 app.on('window-all-closed', function() {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform != 'darwin') {
     app.quit();
   }
 });
 
-
-var appIcon = null;
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
+var mainWindow = null;
 app.on('ready', function() {
-  // Create the browser window.
+  atomScreen = require('screen')
+
   mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow.loadUrl('http://localhost:8123/index.html');
 
-  // and load the index.html of the app.
-  // mainWindow.loadUrl('file://' + __dirname + '/build/index.html');
-  mainWindow.loadUrl('http://localhost:8123/');
-
-  // Open the devtools.
   mainWindow.openDevTools();
 
-  // Emitted when the window is closed.
   mainWindow.on('closed', function() {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-
     mainWindow = null;
   });
-
-  appIcon = new Tray(__dirname + '/icons/ok.png');
-  var contextMenu = Menu.buildFromTemplate([
-    { label: 'Item1', type: 'radio' },
-    { label: 'Item2', type: 'radio' },
-    { label: 'Item3', type: 'radio', checked: true },
-    { label: 'Item4', type: 'radio' }
-  ]);
-  appIcon.setToolTip('This is my application.');
-  appIcon.setContextMenu(contextMenu);
-
-  appIcon.displayBalloon({
-      icon: __dirname + '/icons/ok.png', 
-      title: 'waza', 
-      content: 'this is the content' })
 });
+
+
+
+
+// ============== FUNCTIONS =============
+// ======================================
+function create_someReactView(){
+  const screen_size = atomScreen.getPrimaryDisplay().workAreaSize;
+
+  const notification_width = 200
+  const notification_height = 130
+
+  const notification_x = screen_size.width - notification_width - 10
+  const notification_y = screen_size.height - notification_height - 10
+
+  var notification = new BrowserWindow({
+    'width':          notification_width,
+    'height':         notification_height,
+    'frame':          false,
+    'transparent':    true,
+    'always-on-top':  true,
+    'show':           false,
+    'x':              notification_x,
+    'y':              notification_y
+  });
+  
+  notification.loadUrl('http://localhost:8123/SomeReactView.html')
+  notification.show()
+}

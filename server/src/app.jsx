@@ -1,5 +1,5 @@
 import React from 'react';
-import Tile   from './Tile'
+import Tile   from './Tile.jsx'
 import { Button, ButtonGroup, 
          Grid, Row, Col, 
          OverlayTrigger,
