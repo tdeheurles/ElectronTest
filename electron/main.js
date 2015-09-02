@@ -1,14 +1,18 @@
 /* jshint node: true*/
 'use strict';
 
-var Rx = require('rx')
+const Rx = require('rx')
+let atomScreen = null;
 
-var atomScreen = null;
+const server_adress = "localhost"
+const server_port   = 8123
+
+
 
 
 // ============ IPC ==============
 // ===============================
-var ipc_main = require('ipc')
+const ipc_main = require('ipc')
 
 ipc_main.on('create_someReactView', function(event, arg) {
   create_someReactView()
@@ -29,7 +33,7 @@ let cache = [0,0,0, 0,0,0, 0,0,0,
 
 ipc_main.on('give_it_to_me', function(event, arg) {
   console.log("stream requested")
-  var source = Rx.Observable
+  const source = Rx.Observable
                  .timer(100,16)
                  .map(function(x) { 
                     return [  
@@ -55,8 +59,8 @@ ipc_main.on('give_it_to_me', function(event, arg) {
 
 // ============ MAIN ==============
 // ================================
-var app = require('app');
-var BrowserWindow = require('browser-window');
+const app = require('app');
+const BrowserWindow = require('browser-window');
 
 app.on('window-all-closed', function() {
   if (process.platform != 'darwin') {
@@ -64,12 +68,12 @@ app.on('window-all-closed', function() {
   }
 });
 
-var mainWindow = null;
+let mainWindow = null;
 app.on('ready', function() {
   atomScreen = require('screen')
 
   mainWindow = new BrowserWindow({width: 800, height: 600});
-  mainWindow.loadUrl('http://localhost:8123/index.html');
+  mainWindow.loadUrl("http://${server_adress}:${server_port}/index.html");
 
   mainWindow.openDevTools();
 
@@ -92,7 +96,7 @@ function create_someReactView(){
   const notification_x = screen_size.width - notification_width - 10
   const notification_y = screen_size.height - notification_height - 10
 
-  var notification = new BrowserWindow({
+  const notification = new BrowserWindow({
     'width':          notification_width,
     'height':         notification_height,
     'frame':          false,
@@ -103,6 +107,6 @@ function create_someReactView(){
     'y':              notification_y
   });
   
-  notification.loadUrl('http://localhost:8123/SomeReactView.html')
+  notification.loadUrl('http://${server_adress}:${server_port}/SomeReactView.html')
   notification.show()
 }

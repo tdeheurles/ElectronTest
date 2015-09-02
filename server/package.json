@@ -19,17 +19,7 @@
   "devDependencies": {
     "babelify": "^6.3.0",
     "browserify": "^11.0.1",
-    "electron-packager": "^5.0.2",
-    "electron-prebuilt": "^0.31.1",
-    "electron-rebuild": "^0.2.5",
     "gulp": "^3.9.0",
-    "gulp-load-plugins": "^0.10.0",
-    "gulp-plumber": "^1.0.1",
-    "gulp-sourcemaps": "^1.5.2",
-    "gulp-uglify": "^1.4.0",
-    "gutil": "^1.6.4",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.3.1"
+    "vinyl-source-stream": "^1.1.0"
   }
 }

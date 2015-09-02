@@ -5,7 +5,6 @@ $server_path = "$main_path\server"
 
 cd $server_path
 
-npm install
-npm run gulp
+.\run-server.ps1
 
 cd $main_path

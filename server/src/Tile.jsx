@@ -8,7 +8,7 @@ export default class Tile extends React.Component {
 
   createTile = (e) => {
     var ipc = this.executionTimeRequire('ipc')
-    ipc.send('create_someReactView', null);
+    ipc.send('create_someReactView', null)
   }
   
   render() {

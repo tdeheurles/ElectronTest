@@ -8,8 +8,8 @@ npm install electron-packager -g
 $sourcedir          = "$pwd\electron\"
 $appname            = "electrontest"
 $platform           = "win32"
-$arch               = "all"
-$electron_version   = "0.31.1"
+$arch               = "x64"
+$electron_version   = "0.31.2"
 $app_version        = "0.0.0"
 $output_directory   = "$pwd\electron\packaging"
 $cache_directory    = "$pwd\electron\packaging\cache"
@@ -28,3 +28,4 @@ electron-packager               `
     --overwrite                 `
     --ignore=node_modules       `
     --ignore=packaging
+

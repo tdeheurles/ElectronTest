@@ -1,6 +1,6 @@
 import React  from 'react'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
-import SomeViewModel from './SomeViewModel.jsx'
+import SomeViewModel from './SomeViewModel.js'
 
 export default class SomeReactView extends React.Component {
   constructor(props) {
