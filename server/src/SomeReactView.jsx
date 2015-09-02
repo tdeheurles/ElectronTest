@@ -18,10 +18,10 @@ export default class SomeReactView extends React.Component {
   executionTimeRequire = (name) => { return require(name) }
 
   componentWillMount() {
-    var ipc = this.executionTimeRequire('ipc')  
-    ipc.on('update', (datas) => {
+    const ipc = this.executionTimeRequire('ipc')  
+    ipc.on('update', (data) => {
       let newViewModel = this.state.someViewModel
-      newViewModel.elements = datas
+      newViewModel.elements = data
       this.setState({someViewModel: newViewModel});
     })
     ipc.send('give_it_to_me', 0)

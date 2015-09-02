@@ -1,12 +1,8 @@
 /* jshint node: true*/
 'use strict';
 
-const Rx = require('rx')
-let atomScreen = null;
-
 const server_adress = "localhost"
 const server_port   = 8123
-
 
 
 
@@ -18,13 +14,9 @@ ipc_main.on('create_someReactView', function(event, arg) {
   create_someReactView()
 })
 
-ipc_main.on('notification_been_clicked', function(event, arg) {
-  console.log(arg)
-});
-
-ipc_main.on('kill_me', function(event, arg) {
-  console.log(arg)
-});
+ipc_main.on('create_notification', function(event, arg) {
+  create_notification()
+})
 
 let cache = [0,0,0, 0,0,0, 0,0,0,
              0,0,0, 0,0,0, 0,0,0,
@@ -33,6 +25,7 @@ let cache = [0,0,0, 0,0,0, 0,0,0,
 
 ipc_main.on('give_it_to_me', function(event, arg) {
   console.log("stream requested")
+  const Rx = require('rx')
   const source = Rx.Observable
                  .timer(100,16)
                  .map(function(x) { 
@@ -68,6 +61,8 @@ app.on('window-all-closed', function() {
   }
 });
 
+
+let atomScreen = null;
 let mainWindow = null;
 app.on('ready', function() {
   atomScreen = require('screen')
@@ -100,8 +95,6 @@ function create_someReactView(){
     'width':          notification_width,
     'height':         notification_height,
     'frame':          false,
-    'transparent':    true,
-    'always-on-top':  true,
     'show':           false,
     'x':              notification_x,
     'y':              notification_y

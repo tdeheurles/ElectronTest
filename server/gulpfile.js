@@ -12,7 +12,7 @@ gulp.task('generate-app', function () {
     .transform(babelify, { stage: 0 })
     .bundle()
     .on('error', function(err) { console.error(err); this.emit('end'); })
-    .pipe(source('bundle.js'))
+    .pipe(source('app.js'))
     .pipe(gulp.dest('public/dist'));
 });
 

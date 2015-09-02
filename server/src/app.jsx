@@ -1,6 +1,6 @@
-import React from 'react';
+import React  from 'react';
 import Tile   from './Tile.jsx'
-import { Button, ButtonGroup, 
+import { Button, 
          Grid, Row, Col, 
          OverlayTrigger,
          Label
@@ -8,20 +8,18 @@ import { Button, ButtonGroup,
 
 React.render(
   <Grid>
-    <Row className='show-grid'>
+    <Row>
       <Col xs={1} md={4}></Col>
       <Col xs={10} md={4} className="text-center">
-        Shin Test
+        ElectronTest
       </Col>
       <Col xs={1} md={4}></Col>
     </Row>
 
-    <Row className='show-grid'>
+    <Row>
       <Col xs={4} md={4}></Col>
       <Col xs={4} md={4}>
-        <ButtonGroup>
-          <Tile Title="Create a window" />
-        </ButtonGroup>
+        <Tile Title="Create a RxWindow" />
       </Col>
       <Col xs={4} md={4}></Col>
     </Row>
