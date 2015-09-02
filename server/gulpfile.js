@@ -2,8 +2,7 @@ const gulp        = require('gulp');
 const browserify  = require('browserify');
 const babelify    = require('babelify');
 const source      = require('vinyl-source-stream');
-
-
+const webserver   = require('gulp-webserver');
 
 // TASK DEFINITIONS
 // ================
@@ -42,6 +41,8 @@ gulp.task('copy-html', function () {
 
 
 
+
+
 // ==== MAIN
 // =============
 gulp.task(
@@ -50,4 +51,11 @@ gulp.task(
   function () {
     gulp.watch('./src/**/*.jsx', ['generate-app', 'generate-someViewModel', 'generate-someReactView']);
     gulp.watch('./src/**/*.html', ['copy-html']);
+
+    gulp.src('public')
+        .pipe(webserver({
+          port: 8123,
+          fallback: "index.html",
+          host: "localhost",
+        }));
 });

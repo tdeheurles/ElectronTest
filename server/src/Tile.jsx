@@ -11,7 +11,7 @@ export default class Tile extends React.Component {
   
   render() {
     return (
-      <Button onClick={this.createTile}>{this.props.Title}</Button>
+      <Button onClick={this.createTile} block>{this.props.Title}</Button>
      );
   }
 }
