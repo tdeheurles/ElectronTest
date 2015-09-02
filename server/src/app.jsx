@@ -20,9 +20,7 @@ React.render(
       <Col xs={4} md={4}></Col>
       <Col xs={4} md={4}>
         <ButtonGroup>
-          <Tile Title="Window1" />
-          <Tile Title="Window2" />
-          <Tile Title="Window3" />
+          <Tile Title="Create a window" />
         </ButtonGroup>
       </Col>
       <Col xs={4} md={4}></Col>
