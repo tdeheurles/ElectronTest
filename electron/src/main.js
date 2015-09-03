@@ -1,10 +1,6 @@
 /* jshint node: true*/
 'use strict';
 
-const server_adress = "localhost"
-const server_port   = 8123
-
-
 
 // ============ IPC ==============
 // ===============================
@@ -24,12 +20,13 @@ let cache = [0,0,0, 0,0,0, 0,0,0,
              0,0,0, 0,0,0, 0,0,0 ]
 
 ipc_main.on('give_it_to_me', function(event, arg) {
+  // ====== Rx ======
   console.log("stream requested")
   const Rx = require('rx')
   const source = Rx.Observable
                  .timer(100,16)
-                 .map(function(x) { 
-                    return [  
+                 .map(function(x) {
+                    return [
                       Math.floor((Math.random() * 36) + 1),
                       Math.floor((Math.random() * 100) + 1)
                     ]});
@@ -68,7 +65,8 @@ app.on('ready', function() {
   atomScreen = require('screen')
 
   mainWindow = new BrowserWindow({width: 800, height: 600});
-  mainWindow.loadUrl("http://${server_adress}:${server_port}/index.html");
+  
+  mainWindow.loadUrl("http://localhost:8123/index.html");
 
   mainWindow.openDevTools();
 
@@ -100,6 +98,6 @@ function create_someReactView(){
     'y':              notification_y
   });
   
-  notification.loadUrl('http://${server_adress}:${server_port}/SomeReactView.html')
+  notification.loadUrl("http://localhost:8123/SomeReactView.html");
   notification.show()
 }

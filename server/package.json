@@ -21,6 +21,7 @@
     "browserify": "^11.0.1",
     "gulp": "^3.9.0",
     "gulp-webserver": "^0.9.1",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "readable-stream": "^1.1.13"
   }
 }

@@ -1,4 +1,4 @@
-# ElectronTest 
+# ElectronTest
 
 This project main purpose is to present electron
 
@@ -32,7 +32,7 @@ Electron is `io.js server` that is `installed (without admin rights) on the clie
 When you start an electron application, a first process named `main` is started as an io.js webserver. This `main` process has access to `all the io.js packages`.
 
 The language used to built your views are HTML/Javascript (with all the library/framework ...).  
-This Gui is built on a fork of `chromium`. So, like chrome/chromium, every window is started in a `different process`. The `main` process will manage these views. A view is named a `renderer` process. 
+This Gui is built on a fork of `chromium`. So, like chrome/chromium, every window is started in a `different process`. The `main` process will manage these views. A view is named a `renderer` process.
 
 When you start a view, you give a URL to the code to be interpreted. These URL can bring to a local server hosted by the `main` process or to any other WebSite. You can choose at any time if you prefer a `local application`, a `remote application` or an `hybrid one`.
 
@@ -70,7 +70,7 @@ At the moment, `electron version is 0.31.2`.
 - make a prayer
 - test the electron app
 
-if you've got some problems, go to [issues](#issues).
+if you've got some problems, go to [issues](#issues) and to the [server](#server) section.
 
 ---
 
@@ -85,7 +85,7 @@ app
  *--- package.json
 ```
 
-The `package.json` is a standard node/iojs package file. We put some `metadata` and the `dependencies`. 
+The `package.json` is a standard node/iojs package file. We put some `metadata` and the `dependencies`.
 ```json
 {
   "name":    "ElectronTest",
@@ -124,6 +124,10 @@ When the application is package, 50mb of other files need to be downloaded. All 
 
 ### File exploration
 
+We will now go through all the files of the project to cover briefly all the functionalities.  
+Do not hesitate to open an issue for any question.  
+Note that the code here should not be copy/paste as I added lots of comments that may break the code. Prefer to simply `git clone`
+
 #### electron
 
 Our electron app is composed of two files : `main.js` and `package.json`.
@@ -148,9 +152,6 @@ You will find first some globals defining the server and port. `jshint` and `use
 ```javascript
 /* jshint node: true*/
 'use strict';
-
-const server_adress = "localhost"
-const server_port   = 8123
 ```
 
 We can find a `MAIN` part that will start the application and the first `renderer process`.  
@@ -171,7 +172,7 @@ app.on('ready', function() {
   atomScreen = require('screen')
 
   mainWindow = new BrowserWindow({width: 800, height: 600});
-  mainWindow.loadUrl("http://${server_adress}:${server_port}/index.html");
+  mainWindow.loadUrl("http://localhost:8123/index.html");
 
   mainWindow.openDevTools();
 
@@ -199,7 +200,7 @@ app.on('ready', function() {
   atomScreen = require('screen')
 
   mainWindow = new BrowserWindow({width: 800, height: 600});
-  mainWindow.loadUrl("http://${server_adress}:${server_port}/index.html");
+  mainWindow.loadUrl("http://localhost:8123/index.html");
 
   mainWindow.openDevTools();
 
@@ -236,16 +237,16 @@ The app.jsx is defined in ReactJS. The code can be read like HTML where you can 
 // First we import some element using ES6 syntaxe
 import React from 'react';
 import Tile   from './Tile.jsx'     // Tile is a ReactJS object (see after)
-import { Button, ButtonGroup, 
-         Grid, Row, Col, 
+import { Button, ButtonGroup,
+         Grid, Row, Col,
          OverlayTrigger,
          Label
-       }        from 'react-bootstrap';     // React-Bootstrap propose lots of 
+       }        from 'react-bootstrap';     // React-Bootstrap propose lots of
                                             //   already prepared component
 // The function React.render take two parameters
 // - a HTML like element.
 // - the element where that generated HTML will be put (document.body)
-// 
+//
 // Here I just put a text Element in the first Row, second column. And a Tile element in the second Row, second column.
 // You also can see that we have an easy responisve design achieved with ReactBootstrap.
 React.render(
@@ -265,8 +266,8 @@ React.render(
       </Col>
       <Col xs={4} md={4}></Col>
     </Row>
-  </Grid>, 
-  document.body 
+  </Grid>,
+  document.body
 );
 ```
 
@@ -280,11 +281,11 @@ import { Button } from 'react-bootstrap';
 //   - that extends React.Component
 //   - that will be export as default (behind the scope of this tutorial)
 export default class Tile extends React.Component {
-    
+
     // we first define a function tin the ES6 syntaxe.
-    //   this code permit to avoid browserify to through an error when trying 
-    //   to import an element that won't exist at transpil time. 
-    //   For example, we will import ipc that will just exist at runtime, 
+    //   this code permit to avoid browserify to through an error when trying
+    //   to import an element that won't exist at transpil time.
+    //   For example, we will import ipc that will just exist at runtime,
     //     and only on electron browser
     executionTimeRequire = (name) => { return require(name) }
 
@@ -297,8 +298,8 @@ export default class Tile extends React.Component {
         // Our message does not comport data (empty envelope)
         ipc.send('create_someReactView', null)
   }
-  
-  // Here is the code that define the visual of our object. 
+
+  // Here is the code that define the visual of our object.
   // It's just a button
   render() {
     return (
@@ -314,11 +315,11 @@ export default class Tile extends React.Component {
 So we sent a message to our main process on the `create_someReactView` topic.  
 Look at the corresponding code in the main process file `main.js` in the electron folder :  
 ```javascript
-// We require ipc. Here, the code is not transpiled or browserified so we 
+// We require ipc. Here, the code is not transpiled or browserified so we
 // can just use `require`
 const ipc_main = require('ipc')
 
-// The first and second topics will trigger a function when a message is 
+// The first and second topics will trigger a function when a message is
 // received. It's used to create different `renderer` process.  
 ipc_main.on('create_someReactView', function(event, arg) {
   create_someReactView()
@@ -331,7 +332,7 @@ function create_someReactView(){
   //   to get the screen size
   const screen_size = atomScreen.getPrimaryDisplay().workAreaSize;
 
-  // we define the width of our view 
+  // we define the width of our view
   //  (can be done more dynamically)
   const notification_width = 200
   const notification_height = 130
@@ -374,11 +375,11 @@ export default class SomeReactView extends React.Component {
                                                  0,0,0, 0,0,0, 0,0,0,
                                                  0,0,0, 0,0,0, 0,0,0,
                                                  0,0,0, 0,0,0, 0,0,0 ])
-        
+
         // we define the initial state of our view
         this.state = { someViewModel: someViewModel };
     }
-  
+
     // same as before
     executionTimeRequire = (name) => { return require(name) }
 
@@ -393,7 +394,7 @@ export default class SomeReactView extends React.Component {
             // we create a new ViewModel from the data
             let newViewModel = this.state.someViewModel
             newViewModel.elements = data
-            // we set the state to that new viewModel 
+            // we set the state to that new viewModel
             // react will generate the new component from that state
             this.setState({someViewModel: newViewModel});
         })
@@ -403,7 +404,7 @@ export default class SomeReactView extends React.Component {
     }
 
   // as for all ReactJS, the visual part of the element
-  //   here we just have something like a table (that can 
+  //   here we just have something like a table (that can
   //     have be put in another object)
   // We can notice the style added for the Gui. It's a html class that
   //   correspond to electron (need to be added on frameless view)
@@ -425,11 +426,11 @@ export default class SomeReactView extends React.Component {
 }
 
 // We instiate a SomeReactView (defined just before)
-//   and we put it directly under the body of the html 
+//   and we put it directly under the body of the html
 //     (erasing everything defined inside)
 React.render(
   <SomeReactView />,
-  document.body 
+  document.body
 );
 
 ```
@@ -440,12 +441,13 @@ The `second renderer process` have started. Just before appearing (ComponentWill
 
 #### Rx
 
-We look now inside the `main process` code in the `app.js` file.  
+We look now inside the `main process` code in the `app.js` file at the `Rx section`.  
 
 This code is separated in three elements.  
 The first will permit to trigger an action on the reception of a message on the topic `give_it_to_me` :  
 ```javascript
-// We know that the message is an empty envelope so we don't care of arg. event will be used later to find the author of the message with `event.sender`
+// We know that the message is an empty envelope so we don't care of arg.
+// event will be used later to find the author of the message with `event.sender`
 ipc_main.on('give_it_to_me', function(event, arg) {
   console.log("stream requested")
   //[...]
@@ -460,7 +462,7 @@ Then we map each `ping` with a value. In this case, I return an array of two ran
   const Rx = require('rx')
   const source = Rx.Observable
                  .timer(100,16)
-                 .map(function(x) { 
+                 .map(function(x) {
                     return [  
                       Math.floor((Math.random() * 36) + 1),
                       Math.floor((Math.random() * 100) + 1)
@@ -495,19 +497,248 @@ Finally we `subscribe` to this pattern and tell what we want to do when :
   );
 ```
 
-Each click on the main view button should generate a new GUI with a lot of number changing fast. The CPU will determine the number of GUI that can be generated (it's a simple HelloWorld here).
+Each click on the main view button should generate a new GUI with a lot of number changing fast. The CPU will determine the number of GUI that can be generated (it's a simple non optimized HelloWorld here).
 
-#### server process
+### packaging
+
+The project comes with two main parts : `electron` and the `server`.  
+We will here have a look to the generation of the code from the source for each one.
+The script are very static for now (no config).
 
 #### main path
 
-##### run-electron.ps1
+In the main path you will find a run script for each mini project : `run-electron.ps1` and `run-server.ps1`.  
+`build-windows-package.ps1` and `npm-install-for-electron.bat` are used by `run-electron.ps1`.  
 
-##### run-server.ps1
+##### run-electron.ps1
+```bash
+# PowerShell script
+
+# We define a reference to the main folder
+$main_path = "$pwd"
+
+# We statically define where electron will be run
+$electron_runtime = "$main_path\electron\packaging\electrontest-win32-x64"
+
+# We download a version of electron and get a cache
+.\build-windows-package.ps1
+
+# We install the npm dependencies for node
+#   (the command is a bit special for electron)
+.\npm-install-for-electron.bat
+
+# We move to the electron folder and execute the program
+cd $electron_runtime
+.\electrontest.exe
+```
 
 ##### build-windows-package.ps1
+```bash
+# npm propose a packager for electron named `electron-packager`.
+#   This one won't generate a unique exe file but will download all the
+#   required files from some configuration
+npm install electron-packager -g
+
+$sourcedir          = "$pwd\electron\src"  # Where are our sources
+$appname            = "electrontest"       # The name that will appear everywhere
+$platform           = "win32"              # windows/mac/linux
+$arch               = "x64"                # architecture
+$electron_version   = "0.31.2"             # the version of electron you want (no latest)
+$app_version        = "0.0.0"              # the version for our app
+$output_directory   = "$pwd\electron\packaging"        # path for our package
+$cache_directory    = "$pwd\electron\packaging\cache"  # path for our cache
+
+# We give all paramters and add --overwrite to generate completely everytime
+electron-packager               `
+    $sourcedir                  `
+    $appname                    `
+    --platform=$platform        `
+    --arch=$arch                `
+    --version=$electron_version `
+    --app-version=$app_version  `
+    --out=$output_directory     `
+    --cache=$cache_directory    `
+    --overwrite
+```
 
 ##### npm-install.bat
+```bash
+# stop log
+@echo off
+
+# move to the app folder inside the packaged electron
+cd  electron\packaging\electrontest-win32-x64\resources\app
+
+# set variable needed by electron for adding npm package
+set npm_config_disturl=https://atom.io/download/atom-shell
+set npm_config_target=0.31.2
+set npm_config_arch=x64
+set HOME=~/.electron-gyp
+
+# We install (with addition of the paramters to add package if needed)
+#   ie: npm-install.bat gulp --save-dev
+npm install %*
+```
+
+##### run-server.ps1
+This one is just a wrapper to the one in the server folder (you can use the same command inside each folder). It's very simple commands here.
+```bash
+# main folder
+
+cd server
+
+.\run-server.ps1
+```
+
+```bash
+# server path
+
+# install the npm (according to package.json)
+npm install
+
+# launch gulp (according to gulpfile.js)
+npm run gulp
+```
+
+##### package.json
+```json
+{
+  "name": "electrontest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",     "//": "HERE WE TELL NPM THAT THE ENTRYPOINT IS GULP",
+  "scripts": {
+    "gulp": "gulp",          "//": "OUR `npm run gulp` CORRESPOND TO THAT LINE",
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {          "//": "THIS DEPENDENCIES WILL BE INCLUDED IN OUR BUNDLE FILES",
+    "react": "^0.13.3",
+    "react-bootstrap": "^0.25.0",
+    "bootstrap": "^3.3.5",
+    "electron-toaster": "^1.0.8",
+    "node-notifier": "^4.2.3"
+  },
+  "devDependencies": {       "//": "THIS DEPENDENCIES DOES NOT AFFECT THE BUNDLE FILES",
+    "babelify": "^6.3.0",
+    "browserify": "^11.0.1",
+    "gulp": "^3.9.0",
+    "gulp-webserver": "^0.9.1",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
+```
+
+
+##### gulpfile.js
+
+`gulp` is an helper that can be used to automate task for web stuff. It's in the same category as `webpack`
+The main idea here is to take the sources, transpile them from ReactJS and ES6 to the ES5 the browser knows.
+
+```javascript
+first we get some dependencies
+// gulp will manage this process. everything is organised in task.
+// Each task can be triggered from the CLI with `gulp run taskname`
+//   the `default` is automatically triggered if no name is given
+const gulp        = require('gulp');                 
+
+// browserify is the one that will transform our multiple files in only one
+// this task is done according to the require in the code
+//   It's the one that we contourn with the function
+//      executionTimeRequire = (name) => { return require(name) }
+//      defined in Tile.jsx and SomeReactView.jsx
+const browserify  = require('browserify');
+
+// Babel is a transpiler
+// This package permit us to use ES6 and ES7 features in our code.
+// It's the one that also transpile our ReactJS jsx files in js files
+const babelify    = require('babelify');
+
+// This one manage the process of the transpile
+const source      = require('vinyl-source-stream');
+
+// Webserver as its name says will serve our files. It simpler in this project
+// than using an nginx or something else
+const webserver   = require('gulp-webserver');
+
+
+// TASK DEFINITIONS
+// ================
+// Here we define 4 gulp task. Each one corresponding to a part of the project
+
+// The first one generate the app.js file that correspond to our first renderer process
+gulp.task('generate-app', function () {
+  // We first give to browserify the entry point of `tree` of files
+  //     (It will follow automatically the require)
+  //     debug tells him to generate a map file
+  //      ==> (you will be able to look to the none transpiled class from the browser)
+  return browserify({entries: './src/app.jsx', extensions: ['.jsx'], debug: true})
+    // here is the command for babel. stage define the features we want to use
+    //   stages are the development progress of the feature. Here I use early stage features
+    //   function declaration is one of them => ie: "() => { }"
+    .transform(babelify, { stage: 0 })
+    .bundle()
+    //   This line ask gulp to continue when an error is thrown in the transpile process
+    //     ie: tou forget a `,` and you save. If this line is not present, gulp stop
+    .on('error', function(err) { console.error(err); this.emit('end'); })
+    //   The name of the generated file
+    .pipe(source('app.js'))
+    // the folder where to put our generated file
+    .pipe(gulp.dest('public/dist'));
+});
+
+// this task is in the same form
+gulp.task('generate-someReactView', function () {
+  return browserify({entries: './src/SomeReactView.jsx', extensions: ['.jsx'], debug: true})
+    .transform(babelify, { stage: 0 })
+    .bundle()
+    .on('error', function(err) { console.error(err); this.emit('end'); })
+    .pipe(source('SomeReactView.js'))
+    .pipe(gulp.dest('public/dist'));
+});
+
+// this task is in the same form
+gulp.task('generate-someViewModel', function () {
+  return browserify({entries: './src/SomeViewModel.js', extensions: ['.js'], debug: true})
+    .transform(babelify, { stage: 0 })
+    .bundle()
+    .on('error', function(err) { console.error(err); this.emit('end'); })
+    .pipe(source('SomeViewModel.js'))
+    .pipe(gulp.dest('public/dist'));
+});
+
+// Here we just copy past the html files from src to public
+gulp.task('copy-html', function () {
+   gulp.src('./src/**/*.html')
+   .pipe(gulp.dest('./public'));
+});
+
+
+
+
+// ==== MAIN
+// =============
+// the default task is the main one, it will be triggered by our `npm run gulp` in the `run-server.ps1`
+// the default task starts by triggering the four task defined upper
+gulp.task(
+  'default',
+  ['generate-app', 'generate-someViewModel', 'copy-html', 'generate-someReactView'],
+  function () {
+    // then this two line ask to look for any change in our files (at save time).
+    // ie: I look for any jsx in any path under src, and trigger my generate-tasks
+    gulp.watch('./src/**/*.jsx', ['generate-app', 'generate-someViewModel', 'generate-someReactView' ]);
+    gulp.watch('./src/**/*.html', ['copy-html']);
+
+    // this code correspond to the server
+    // I give him port, index file.
+    gulp.src('public')
+        .pipe(webserver({
+          port: 8123,
+          fallback: "index.html"
+        }));
+});
+```
+
 
 ### Issues
 

@@ -5,7 +5,7 @@
 # add electron-packager to npm
 npm install electron-packager -g
 
-$sourcedir          = "$pwd\electron\"
+$sourcedir          = "$pwd\electron\src"
 $appname            = "electrontest"
 $platform           = "win32"
 $arch               = "x64"
@@ -25,7 +25,4 @@ electron-packager               `
     --app-version=$app_version  `
     --out=$output_directory     `
     --cache=$cache_directory    `
-    --overwrite                 `
-    --ignore=node_modules       `
-    --ignore=packaging
-
+    --overwrite

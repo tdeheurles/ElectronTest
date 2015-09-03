@@ -4,6 +4,7 @@ const babelify    = require('babelify');
 const source      = require('vinyl-source-stream');
 const webserver   = require('gulp-webserver');
 
+
 // TASK DEFINITIONS
 // ================
 gulp.task('generate-app', function () {
@@ -46,10 +47,12 @@ gulp.task('copy-html', function () {
 // ==== MAIN
 // =============
 gulp.task(
-  'default', 
-  ['generate-app', 'generate-someViewModel', 'copy-html', 'generate-someReactView'], 
+  'default',
+  ['generate-app', 'generate-someViewModel', 'copy-html', 'generate-someReactView'],
   function () {
-    gulp.watch('./src/**/*.jsx', ['generate-app', 'generate-someViewModel', 'generate-someReactView']);
+    gulp.watch('./src/**/*.jsx', ['generate-app',
+                                  'generate-someViewModel',
+                                  'generate-someReactView' ]);
     gulp.watch('./src/**/*.html', ['copy-html']);
 
     gulp.src('public')
