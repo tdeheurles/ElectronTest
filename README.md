@@ -20,7 +20,6 @@ Summary
 - [This project main concept](#this-project-main-concept)
 - [Go-Fast](#go-fast)
 - [File exploration](#file-exploration)
-- [TODO](#todo)
 - [Issues](#issues)
 
 ---
